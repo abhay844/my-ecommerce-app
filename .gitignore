@@ -1,0 +1,5 @@
+#Ignoring .ini file
+*.ini
+
+#ignoring .pyc files
+__pycache__/
