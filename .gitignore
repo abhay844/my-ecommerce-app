@@ -2,4 +2,7 @@
 *.ini
 
 #ignoring .pyc files
-__pycache__/
+__pycache__
+
+#ignoring .idea files
+.idea/
