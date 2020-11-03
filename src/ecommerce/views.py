@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from .forms import ContactForm
 
 
 def home_page_old(request):
@@ -44,8 +45,12 @@ def about_page(request):
 
 
 def contact_page(request):
+    form = ContactForm(request.POST or None)
     context = {"title": "Contact page",
-               "content": "Welcome to contact page"}
-    if request.method == "POST":
-        print(request.POST.get("fullname"))
+               "content": "Welcome to contact page",
+               "form": form
+               }
+    if form.is_valid():
+        print(form.cleaned_data)
+
     return render(request, "contact/view.html", context)
