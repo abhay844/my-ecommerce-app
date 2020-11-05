@@ -20,11 +20,12 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.home_page, name='home'),
+    path('home', views.home_page, name='home'),
     path('about/', views.about_page),
     path('contact/',  views.contact_page),
     path('admin/', admin.site.urls),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
-    url(r'^oauth/', include('social_django.urls', namespace='social'))
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
+    path('login_page', views.login_page, name='custom_login')
 ]

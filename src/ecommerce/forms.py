@@ -32,3 +32,15 @@ class ContactForm(forms.Form):
             raise forms.ValidationError("Email has to contain gmail")
 
         return email
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+
+        if len(username) < 4:
+            raise forms.ValidationError("Not a valid username")
+        return username

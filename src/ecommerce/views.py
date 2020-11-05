@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .forms import ContactForm
+from .forms import ContactForm, LoginForm
+from django.contrib.auth import authenticate, login
 
 
 def home_page_old(request):
@@ -54,3 +55,27 @@ def contact_page(request):
         print(form.cleaned_data)
 
     return render(request, "contact/view.html", context)
+
+
+def login_page(request):
+    form = LoginForm(request.POST or None)
+    context_var = {"form": form}
+
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            context_var["form"] = LoginForm()
+            return redirect("/home")
+
+        else:
+            print("User is not authenticated")
+        context_var['form'] = LoginForm()
+
+    return render(request, "auth/login.html", context_var)
+
+
+def register_page(request):
+    return render(request, "auth/register.html", {})
