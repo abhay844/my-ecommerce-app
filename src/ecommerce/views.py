@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .forms import ContactForm, LoginForm
-from django.contrib.auth import authenticate, login
+from .forms import ContactForm, LoginForm, RegisterForm
+from django.contrib.auth import authenticate, login, get_user_model
 
 
 def home_page_old(request):
-    html_= """<!doctype html>
+    html_ = """<!doctype html>
             <html lang="en">
               <head>
                 <!-- Required meta tags -->
@@ -32,10 +32,11 @@ def home_page_old(request):
             </html>"""
     return HttpResponse(html_)
 
+
 @login_required
 def home_page(request):
-    context = {"title":"Home page",
-               "content":"Welcome to home page"}
+    context = {"title": "Home page", "content": "Welcome to home page",
+               "premium_content": "YEEEAAAAHHHH!!!"}
     return render(request, "home_page.html", context)
 
 
@@ -68,7 +69,7 @@ def login_page(request):
         if user is not None:
             login(request, user)
             context_var["form"] = LoginForm()
-            return redirect("/home")
+            return redirect("/")
 
         else:
             print("User is not authenticated")
@@ -77,5 +78,20 @@ def login_page(request):
     return render(request, "auth/login.html", context_var)
 
 
+User = get_user_model()
+
+
 def register_page(request):
-    return render(request, "auth/register.html", {})
+    form = RegisterForm(request.POST or None)
+    context = {"form": form}
+    if form.is_valid():
+        print(form.cleaned_data)
+        data = form.cleaned_data
+        username = data["username"]
+        email = data["email"]
+        password = data["password"]
+        new_user = User.objects.create_user(username, email, password)
+        print(new_user)
+        form = RegisterForm()
+
+    return render(request, "auth/register.html", context)
