@@ -18,6 +18,8 @@ from django.urls import path
 from django.conf.urls import url, include
 from . import views
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home_page, name='home'),
@@ -30,3 +32,7 @@ urlpatterns = [
     path('login_page', views.login_page, name='custom_login'),
     path('register', views.register_page, name='register_page')
 ]
+
+if settings.DEBUG:
+    urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

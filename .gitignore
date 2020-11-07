@@ -6,3 +6,5 @@ __pycache__
 
 #ignoring .idea files
 .idea/
+
+static_cdn/
