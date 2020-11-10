@@ -20,6 +20,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from products.views import ProductListView, product_list_view
 
 urlpatterns = [
     path('', views.home_page, name='home'),
@@ -30,7 +31,9 @@ urlpatterns = [
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     path('login_page', views.login_page, name='custom_login'),
-    path('register', views.register_page, name='register_page')
+    path('register', views.register_page, name='register_page'),
+    url(r'^products/', ProductListView.as_view()),
+    url(r'^products_afv/', product_list_view)
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,9 @@
+<div class="container">
+   <div class="row">
+       <div class="col-sm-6">
+            {% for obj in object_list %}
+           <span>{{ obj.title }}</span>&nbsp;&nbsp;&nbsp;<span>{{ obj.description }}</span><br/>
+            {% endfor %}
+       </div>
+   </div>
+</div>
