@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic.list import ListView
+from django.views.generic import ListView, DetailView
 from .models import Product
 # Create your views here.
 
@@ -15,4 +15,18 @@ def product_list_view(request):
         "object_list": queryset
     }
     return render(request, "products/list.html", context)
+
+
+class ProductDetailView(DetailView):
+    queryset = Product.objects.all()
+    template_name = "products/detail.html"
+
+
+def product_detail_view(request):
+    queryset = Product.objects.all()
+    context = {
+        "object": queryset
+    }
+
+    return render(request, "products/detail.html", context)
 
