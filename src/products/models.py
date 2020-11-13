@@ -14,9 +14,18 @@ def upload_image_path(instance, filename):
     name, ext = get_file_ext(filename)
     final_file_name = '{new_file_name}{ext}'.format(new_file_name=new_file_name, ext=ext)
     return "products/{new_file_name}/{final_file_name}".format(
-            new_file_name=new_file_name,
-            final_file_name=final_file_name
-            )
+        new_file_name=new_file_name,
+        final_file_name=final_file_name
+    )
+
+
+class ProductManager(models.Manager):
+    def get_by_id(self, id):
+        qs = self.get_queryset().filter(pk=id)  # self.get_queryset() == Product.objects
+        if qs.count() == 1:
+            return qs.first()
+
+        return None
 
 
 # Create your models here.
@@ -25,6 +34,8 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(decimal_places=2, max_digits=15, default=39.99)
     image = models.ImageField(upload_to=upload_image_path, null=True, blank=True)
+
+    objects = ProductManager()
 
     def __str__(self):
         return self.title
