@@ -2,7 +2,25 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from .models import Product
 from django.http import Http404
+
+
 # Create your views here.
+
+class ProductFeaturedListView(ListView):
+    template_name = "products/list.html"
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        return Product.objects.all().featured()
+
+
+class ProductFeaturedDetailView(DetailView):
+    queryset = Product.objects.all().featured()
+    template_name = "products/featured-detail.html"
+
+    # def get_queryset(self, *args, **kwargs):
+    #     request = self.request
+    #     return Product.objects.featured()
 
 
 class ProductListView(ListView):
@@ -38,7 +56,6 @@ class ProductDetailView(DetailView):
 
 def product_detail_view(request, pk=None, *args, **kwargs):
     # instance = get_object_or_404(Product, pk=pk)
-    context = {}
     # try:
     #     instance = Product.objects.get(id=pk)
     # except Product.DoesNotExist:
@@ -49,9 +66,8 @@ def product_detail_view(request, pk=None, *args, **kwargs):
 
     instance = Product.objects.get_by_id(id=pk)
     if instance is not None:
-        context["object"] = instance
+        context = dict(object=instance)
     else:
         raise Http404("Product does not exist")
 
     return render(request, "products/detail.html", context)
-

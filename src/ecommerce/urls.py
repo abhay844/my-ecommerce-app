@@ -20,7 +20,14 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from products.views import ProductListView, product_list_view, ProductDetailView, product_detail_view
+from products.views import (
+                            ProductListView,
+                            product_list_view,
+                            ProductDetailView,
+                            product_detail_view,
+                            ProductFeaturedListView,
+                            ProductFeaturedDetailView
+                            )
 
 urlpatterns = [
     path('', views.home_page, name='home'),
@@ -35,7 +42,9 @@ urlpatterns = [
     path('products/', ProductListView.as_view()),
     path('products_afv/', product_list_view),
     re_path(r'^products/(?P<pk>\d+)/$', ProductDetailView.as_view()),
-    re_path(r'products_afv/(?P<pk>\d+)/$', product_detail_view)
+    re_path(r'products_afv/(?P<pk>\d+)/$', product_detail_view),
+    path("featured/", ProductFeaturedListView.as_view()),
+    re_path(r'^featured/(?P<pk>\d+)/$', ProductFeaturedDetailView.as_view())
 ]
 
 if settings.DEBUG:
