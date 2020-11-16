@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView
 from .models import Product
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
-
+@method_decorator(login_required, name='dispatch')
 class ProductFeaturedListView(ListView):
     template_name = "products/list.html"
 
@@ -35,6 +37,25 @@ def product_list_view(request):
     }
     return render(request, "products/list.html", context)
 
+
+class ProductDetailSlugView(DetailView):
+    queryset = Product.objects.all()
+    template_name = "products/detail.html"
+
+    def get_object(self, queryset=None):
+        request = self.request
+        slug = self.kwargs.get('slug')
+
+        try:
+            instance = Product.objects.get(slug=slug, active=True)
+        except Product.DoesNotExist:
+            raise Http404("Does not exist")
+        except Product.MultipleObjectsReturned:
+            qs = Product.objects.filter(slug=slug, active=True)
+            instance = qs.first()
+        except:
+            raise Http404("uhhhhmmmm")
+        return instance
 
 class ProductDetailView(DetailView):
     queryset = Product.objects.all()
