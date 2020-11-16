@@ -2,7 +2,9 @@
    <div class="row">
        <div class="col-sm-6">
             {% for obj in object_list %}
-           <span>{{ obj.title }}</span>&nbsp;&nbsp;&nbsp;<span>{{ obj.description }}</span><br/>
+           <a href="{{ obj.get_absolute_url}}">
+               <span>{{ obj.title }}</span>
+           </a> <br>
             {% endfor %}
        </div>
    </div>

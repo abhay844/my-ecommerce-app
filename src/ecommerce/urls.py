@@ -20,15 +20,6 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from products.views import (
-                            ProductListView,
-                            product_list_view,
-                            ProductDetailView,
-                            product_detail_view,
-                            ProductFeaturedListView,
-                            ProductFeaturedDetailView,
-                            ProductDetailSlugView
-                            )
 
 urlpatterns = [
     path('', views.home_page, name='home'),
@@ -40,13 +31,7 @@ urlpatterns = [
     re_path(r'^oauth/', include('social_django.urls', namespace='social')),
     path('login_page', views.login_page, name='custom_login'),
     path('register', views.register_page, name='register_page'),
-    path('products/', ProductListView.as_view()),
-    path('products_afv/', product_list_view),
-    # re_path(r'^products/(?P<pk>\d+)/$', ProductDetailView.as_view()),
-    re_path(r'products_afv/(?P<pk>\d+)/$', product_detail_view),
-    re_path(r'^products/(?P<slug>[\w-]+)/$', ProductDetailSlugView.as_view()),
-    path("featured/", ProductFeaturedListView.as_view()),
-    re_path(r'^featured/(?P<pk>\d+)/$', ProductFeaturedDetailView.as_view())
+    path('products/', include("products.urls"))
 ]
 
 if settings.DEBUG:
